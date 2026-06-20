@@ -1,260 +1,185 @@
-/* ===================================================================
-   Calculator -- style.css
-   Clean, responsive design inspired by modern iOS/macOS style
-   =================================================================== */
+/* ======================================================================
+   Calculator — style.css
+   Responsive, mobile-first design
+   ====================================================================== */
 
-/* ---------- Reset & Base ---------- */
+/* ---------- Reset & base ---------- */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-:root {
-  --bg-page:        #1a1a2e;
-  --bg-calc:        #16213e;
-  --bg-display:     #0f3460;
-  --color-display:  #e0e0e0;
-  --color-expr:     #8892a4;
-
-  --btn-number-bg:  #1a1a2e;
-  --btn-number-fg:  #e0e0e0;
-  --btn-number-hover: #252545;
-
-  --btn-op-bg:      #0f3460;
-  --btn-op-fg:      #56cfe1;
-  --btn-op-hover:   #1a4a80;
-  --btn-op-active:  #56cfe1;
-  --btn-op-active-fg: #0f3460;
-
-  --btn-util-bg:    #1e2a45;
-  --btn-util-fg:    #ff6b6b;
-  --btn-util-hover: #2a3a5e;
-
-  --btn-eq-bg:      #e94560;
-  --btn-eq-fg:      #fff;
-  --btn-eq-hover:   #c73652;
-
-  --btn-back-bg:    #1e2a45;
-  --btn-back-fg:    #ffa552;
-  --btn-back-hover: #2a3a5e;
-
-  --radius-calc:    20px;
-  --radius-btn:     14px;
-  --shadow:         0 25px 60px rgba(0, 0, 0, 0.6);
-  --font:           'Segoe UI', system-ui, -apple-system, sans-serif;
-}
-
-html, body {
-  height: 100%;
+html {
+  font-size: 16px;
 }
 
 body {
-  font-family: var(--font);
-  background: var(--bg-page);
-  background-image: radial-gradient(ellipse at top left, #1a1a3e 0%, #1a1a2e 60%);
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  padding: 16px;
+  background: #1a1a2e;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-.calc-wrapper {
-  width: 100%;
-  max-width: 380px;
-}
-
+/* ---------- Calculator shell ---------- */
 .calculator {
-  background: var(--bg-calc);
-  border-radius: var(--radius-calc);
-  box-shadow: var(--shadow);
-  padding: 24px 20px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  width: min(100vw, 380px);
+  background: #16213e;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.55),
+    0  8px 16px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
+/* ---------- Display ---------- */
 .display {
-  background: var(--bg-display);
-  border-radius: 14px;
-  padding: 20px 22px 16px;
+  padding: 28px 24px 16px;
+  background: #0f3460;
+  min-height: 120px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
-  min-height: 110px;
   justify-content: flex-end;
+  align-items: flex-end;
+  gap: 4px;
   overflow: hidden;
-  border: 1px solid rgba(86, 207, 225, 0.15);
 }
 
-.expression {
-  font-size: 0.9rem;
-  color: var(--color-expr);
-  min-height: 1.2em;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.display__expression {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.45);
+  min-height: 1.3em;
   word-break: break-all;
   text-align: right;
-  transition: font-size 0.1s;
+  letter-spacing: 0.02em;
 }
 
-.result {
-  font-size: 2.8rem;
+.display__result {
+  font-size: 3rem;
   font-weight: 300;
-  color: var(--color-display);
-  letter-spacing: -1px;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: #ffffff;
+  word-break: break-all;
   text-align: right;
-  transition: font-size 0.15s ease;
+  letter-spacing: -0.02em;
   line-height: 1.1;
+  transition: font-size 0.1s ease;
 }
 
-.result.medium { font-size: 2.1rem; }
-.result.small  { font-size: 1.6rem; }
-.result.xsmall { font-size: 1.2rem; }
+.display__result.small  { font-size: 2.2rem; }
+.display__result.xsmall { font-size: 1.6rem; }
 
-.result.error {
-  color: #ff6b6b;
-  font-size: 1.5rem;
-}
-
-.buttons-grid {
+/* ---------- Button grid ---------- */
+.buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  gap: 1px;
+  background: #0d0d1a;
+  padding: 1px;
 }
 
 .btn {
+  position: relative;
+  appearance: none;
   border: none;
-  border-radius: var(--radius-btn);
   cursor: pointer;
-  font-family: var(--font);
-  font-size: 1.25rem;
-  font-weight: 500;
-  height: 68px;
+  font-size: 1.4rem;
+  font-weight: 400;
+  padding: 0;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
-  outline: none;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  transition: background 0.12s ease, transform 0.08s ease, color 0.12s ease;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  position: relative;
-  overflow: hidden;
+  outline: none;
 }
 
-.btn:focus-visible {
-  box-shadow: 0 0 0 3px rgba(86, 207, 225, 0.55);
+.btn--wide {
+  grid-column: span 2;
+  justify-content: flex-start;
+  padding-left: 28px;
+}
+
+.btn--secondary {
+  background: #2d2d44;
+  color: #c0c0d0;
+  font-weight: 500;
+}
+
+.btn--operator {
+  background: #e94560;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.btn--equals {
+  background: linear-gradient(135deg, #e94560, #c73652);
+}
+
+.btn--operator.active {
+  background: #ffffff;
+  color: #e94560;
+}
+
+.btn:hover {
+  filter: brightness(1.18);
 }
 
 .btn:active {
   transform: scale(0.93);
+  filter: brightness(0.92);
 }
 
-.btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.08);
-  opacity: 0;
-  border-radius: inherit;
-  transition: opacity 0.2s;
-}
-.btn:active::after { opacity: 1; }
-
-.btn-number {
-  background: var(--btn-number-bg);
-  color: var(--btn-number-fg);
-  border: 1px solid rgba(255,255,255,0.06);
-}
-.btn-number:hover { background: var(--btn-number-hover); }
-
-.btn-zero {
-  grid-column: span 2;
-  justify-content: flex-start;
-  padding-left: 26px;
+.btn:focus-visible {
+  outline: 2px solid #e94560;
+  outline-offset: -2px;
+  z-index: 1;
 }
 
-.btn-operator {
-  background: var(--btn-op-bg);
-  color: var(--btn-op-fg);
-  font-size: 1.4rem;
-  border: 1px solid rgba(86, 207, 225, 0.2);
-}
-.btn-operator:hover { background: var(--btn-op-hover); }
-.btn-operator.active {
-  background: var(--btn-op-active);
-  color: var(--btn-op-active-fg);
+.hint {
+  padding: 10px 16px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.22);
+  text-align: center;
+  background: #16213e;
+  letter-spacing: 0.02em;
 }
 
-.btn-utility {
-  background: var(--btn-util-bg);
-  color: var(--btn-util-fg);
-  border: 1px solid rgba(255, 107, 107, 0.18);
-}
-.btn-utility:hover { background: var(--btn-util-hover); }
-
-.btn-equals {
-  background: var(--btn-eq-bg);
-  color: var(--btn-eq-fg);
-  font-size: 1.4rem;
-  box-shadow: 0 4px 20px rgba(233, 69, 96, 0.4);
-  border: none;
-}
-.btn-equals:hover {
-  background: var(--btn-eq-hover);
-  box-shadow: 0 4px 28px rgba(233, 69, 96, 0.55);
+.display__result.error {
+  font-size: 1.8rem;
+  color: #ff6b6b;
 }
 
-.backspace-row {
-  display: flex;
-  justify-content: flex-end;
+@media (max-width: 400px) {
+  .calculator {
+    border-radius: 0;
+    width: 100vw;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .btn {
+    height: 72px;
+    font-size: 1.25rem;
+  }
+  .display__result {
+    font-size: 2.6rem;
+  }
+  .hint {
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
 }
 
-.btn-backspace {
-  background: var(--btn-back-bg);
-  color: var(--btn-back-fg);
-  width: 100%;
-  height: 48px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 165, 82, 0.2);
-  font-size: 0.9rem;
-  letter-spacing: 0.05em;
-}
-.btn-backspace:hover { background: var(--btn-back-hover); }
-.btn-backspace svg {
-  pointer-events: none;
-}
-
-.calculator::after {
-  content: ''; /* keyboard hint removed for cleanness -- added by JS */
-}
-
-@media (max-width: 380px) {
-  .calculator { padding: 18px 14px 14px; gap: 12px; }
-  .btn { height: 60px; font-size: 1.1rem; }
-  .result { font-size: 2.4rem; }
-  .buttons-grid { gap: 9px; }
-}
-
-@media (max-width: 320px) {
-  .btn { height: 54px; font-size: 1rem; }
-  .result { font-size: 2rem; }
-}
-
-@media (max-height: 500px) and (orientation: landscape) {
-  body { align-items: flex-start; padding: 8px; }
-  .calculator { padding: 12px; gap: 8px; }
-  .display { min-height: 70px; padding: 10px 16px; }
-  .result { font-size: 1.8rem; }
-  .btn { height: 50px; }
-  .buttons-grid { gap: 7px; }
+@media (min-height: 750px) and (max-width: 400px) {
+  .btn {
+    height: 88px;
+  }
 }
