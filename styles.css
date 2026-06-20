@@ -1,0 +1,130 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #1a1a2e;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ===== Calculator Shell ===== */
+.calculator {
+  width: 320px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  background: #16213e;
+}
+
+/* ===== Display ===== */
+.display {
+  background: #0f3460;
+  padding: 24px 20px 16px;
+  text-align: right;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.display__expression {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.55);
+  min-height: 1.2em;
+  word-break: break-all;
+  letter-spacing: 0.5px;
+}
+
+.display__result {
+  font-size: 2.6rem;
+  color: #e0e0e0;
+  font-weight: 300;
+  letter-spacing: -1px;
+  word-break: break-all;
+  transition: font-size 0.1s ease;
+}
+
+.display__result.small {
+  font-size: 1.8rem;
+}
+
+/* ===== Button Grid ===== */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: #0a0a1a;
+}
+
+/* ===== Individual Buttons ===== */
+.btn {
+  border: none;
+  cursor: pointer;
+  font-size: 1.3rem;
+  font-weight: 400;
+  padding: 20px 0;
+  transition: filter 0.1s ease, transform 0.08s ease;
+  user-select: none;
+}
+
+.btn:active {
+  filter: brightness(1.3);
+  transform: scale(0.95);
+}
+
+.btn--number {
+  background: #1a1a2e;
+  color: #f0f0f0;
+}
+
+.btn--number:hover {
+  background: #25253e;
+}
+
+.btn--utility {
+  background: #3a3a5c;
+  color: #f0f0f0;
+}
+
+.btn--utility:hover {
+  background: #4a4a70;
+}
+
+.btn--operator {
+  background: #e94560;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.btn--operator:hover {
+  background: #ff5577;
+}
+
+.btn--operator.active {
+  background: #ffffff;
+  color: #e94560;
+}
+
+.btn--equals {
+  background: #e94560;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.btn--equals:hover {
+  background: #ff5577;
+}
+
+.btn--wide {
+  grid-column: span 2;
+  text-align: left;
+  padding-left: 28px;
+}
