@@ -1,47 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculator</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="calculator" role="application" aria-label="Calculator">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="calc-wrapper">
+      <div class="calculator" role="application" aria-label="Calculator">
 
-    <div class="display" aria-live="polite">
-      <div class="display__expression" id="expression"></div>
-      <div class="display__result" id="result">0</div>
-    </div>
+        <!-- Display -->
+        <div class="display" aria-live="polite" aria-atomic="true">
+          <div class="expression" id="expression">&nbsp;</div>
+          <div class="result" id="result">0</div>
+        </div>
 
-    <div class="buttons">
-      <button class="btn btn--wide btn--utility" data-action="clear">AC</button>
-      <button class="btn btn--utility" data-action="negate">+/-</button>
-      <button class="btn btn--utility" data-action="percent">%</button>
-      <button class="btn btn--operator" data-action="operator" data-value="div">&#60;/&#62;</button>
+        <!-- Button Grid -->
+        <div class="buttons-grid">
 
-      <button class="btn btn--digit" data-action="digit" data-value="7">7</button>
-      <button class="btn btn--digit" data-action="digit" data-value="8">8</button>
-      <button class="btn btn--digit" data-action="digit" data-value="9">9</button>
-      <button class="btn btn--operator" data-action="operator" data-value="mul">*</button>
+          <!-- Row 1 -->
+          <button class="btn btn-utility" data-action="clear"           aria-label="Clear all">AC</button>
+          <button class="btn btn-utility" data-action="toggle-sign"    aria-label="Toggle sign">+/-</button>
+          <button class="btn btn-utility" data-action="percent"         aria-label="Percent">%</button>
+          <button class="btn btn-operator" data-action="operator" data-value="÷"  aria-label="Divide">÷</button>
 
-      <button class="btn btn--digit" data-action="digit" data-value="4">4</button>
-      <button class="btn btn--digit" data-action="digit" data-value="5">5</button>
-      <button class="btn btn--digit" data-action="digit" data-value="6">6</button>
-      <button class="btn btn--operator" data-action="operator" data-value="sub">-</button>
+          <!-- Row 2 -->
+          <button class="btn btn-number" data-action="digit"  data-value="7" aria-label="7">7</button>
+          <button class="btn btn-number" data-action="digit"  data-value="8" aria-label="8">8</button>
+          <button class="btn btn-number" data-action="digit"  data-value="9" aria-label="9">9</button>
+          <button class="btn btn-operator" data-action="operator" data-value="×"  aria-label="Multiply">×</button>
 
-      <button class="btn btn--digit" data-action="digit" data-value="1">1</button>
-      <button class="btn btn--digit" data-action="digit" data-value="2">2</button>
-      <button class="btn btn--digit" data-action="digit" data-value="3">3</button>
-      <button class="btn btn--operator" data-action="operator" data-value="add">+</button>
+          <!-- Row 3 -->
+          <button class="btn btn-number" data-action="digit"  data-value="4" aria-label="4">4</button>
+          <button class="btn btn-number" data-action="digit"  data-value="5" aria-label="5">5</button>
+          <button class="btn btn-number" data-action="digit"  data-value="6" aria-label="6">6</button>
+          <button class="btn btn-operator" data-action="operator" data-value="-"   aria-label="Subtract">–</button>
 
-      <button class="btn btn--digit btn--wide" data-action="digit" data-value="0">0</button>
-      <button class="btn btn--digit" data-action="decimal">.</button>
-      <button class="btn btn--equals" data-action="equals">=</button>
-    </div>
+          <!-- Row 4 -->
+          <button class="btn btn-number" data-action="digit"  data-value="1" aria-label="1">1</button>
+          <button class="btn btn-number" data-action="digit"  data-value="2" aria-label="2">2</button>
+          <button class="btn btn-number" data-action="digit"  data-value="3" aria-label="3">3</button>
+          <button class="btn btn-operator" data-action="operator" data-value="+"   aria-label="Add">+</button>
 
-    <p class="keyboard-hint">Keyboard supported &nbsp;&middot;&nbsp; Esc = clear &nbsp;&middot;&nbsp; Backspace = delete</p>
-  </div>
-  <script src="app.js"></script>
-</body>
+          <!-- Row 5 -->
+          <button class="btn btn-number btn-zero" data-action="digit"  data-value="0" aria-label="0">0</button>
+          <button class="btn btn-number" data-action="decimal"                                           aria-label="Decimal point">.</button>
+          <button class="btn btn-equals" data-action="equals"                                            aria-label="Equals">=</button>
+
+        </div><!-- /buttons-grid -->
+
+        <!-- Backspace - extra row below grid -->
+        <div class="backspace-row">
+          <button class="btn btn-utility btn-backspace" data-action="backspace" aria-label="Backspace">
+            <!-- backspace SVG icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 4H8l-7 8 7-8H0v12h21V4z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/>
+            </svg>
+          </button>
+        </div>
+
+      </div><!-- /calculator -->
+    </div><!-- /calc-wrapper -->
+
+    <script src="app.js"></script>
+  </body>
 </html>
