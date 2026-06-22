@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salesforce Calculator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-wrapper">
+      <!-- Header -->
+      <header class="sfdc-header">
+        <div class="sfdc-header__logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="#fff">
+            <path d="M12 2C6.48 2 2 6.48 2 12c0 5.52 4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm-1 14v-4H9l3-6 3 6h-2v4z"/>
+  </svg>
+          <span>Salesforce Calculator</span>
+        </div>
+        <div class="sfdc-header__nav">
+          <span class="sfdc-header__app-name">Calc App</span>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="sfdc-main">
+        <div class="sfdc-card">
+          <div class="sfdc-card__header">
+            <h2 class="sfdc-card__title">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#0078D4" style="margin-right:8px;vertical-align:middle">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H6v-2h8v2zm3-4H6v-2h11v2zm0-4H6V7h11v2z"/>
+              </svg>
+              Calculator
+            </h2>
+          </div>
+
+          <div class="sfdc-card__body">
+            <!-- Display -->
+            <div class="calc-display" id="calc-display">
+              <div class="calc-display__expression" id="expression"></div>
+              <div class="calc-display__result" id="result">0</div>
+            </div>
+
+            <!-- Button Grid -->
+            <div class="calc-grid">
+              <!-- Row 1 -->
+              <button class="calc-btn calc-btn--function" data-action="clear">AC</button>
+              <button class="calc-btn calc-btn--function" data-action="toggle-sign">+/-</button>
+              <button class="calc-btn calc-btn--function" data-action="percent">%</button>
+              <button class="calc-btn calc-btn--operator" data-action="operator" data-value="/">&#247;</button>
+
+              <!-- Row 2 -->
+              <button class="calc-btn calc-btn--number" data-action="number" data-value="7">7</button>
+              <button class="calc-btn calc-btn--number" data-action="number" data-value="8">8</button>
+              <button class="calc-btn calc-btn--number" data-action="number" data-value="9">9</button>
+              <button class="calc-btn calc-btn--operator" data-action="operator" data-value="*">&times;</button>
+
+              <!-- Row 3 -->
+              <button class="calc-btn calc-btn--number" data-action="number" data-value="4">4</button>
+              <button class="calc-btn calc-btn--number" data-action="number" data-value="5">5</button>
+              <button class="calc-btn calc-btn--number" data-action="number" data-value="6">6</button>
+              <button class="calc-btn calc-btn--operator" data-action="operator" data-value="-">&#8712;</button>
+
+              <!-- Row 4 -->
+              <button class="calc-btn calc-btn--number" data-action="number" data-value="1">1</button>
+              <button class="calc-btn calc-btn--number" data-action="number" data-value="2">2</button>
+              <button class="calc-btn calc-btn--number" data-action="number" data-value="3">3</button>
+              <button class="calc-btn calc-btn--operator" data-action="operator" data-value="+">+</button>
+
+              <!-- Row 5 -->
+              <button class="calc-btn calc-btn--number calc-btn--zero" data-action="number" data-value="0">0</button>
+              <button class="calc-btn calc-btn--number" data-action="decimal">.</button>
+              <button class="calc-btn calc-btn--equals" data-action="equals">=</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- History Panel -->
+        <div class="sfdc-card sfdc-card--history">
+          <div class="sfdc-card__header">
+            <h2 class="sfdc-card__title">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#0078D4" style="margin-right:8px;vertical-align:middle">
+                <path d="M13 3h-2v10l4.4 4.4 1.4-1.4-3.8-3.8V3z"/>
+              </svg>
+              Recent Calculations
+            </h2>
+            <button class="sfdc-btn sfdc-btn--neutral" id="clear-history">Clear History</button>
+          </div>
+          <div class="sfdc-card__body">
+            <ul class="history-list" id="history-list">
+              <li class="history-list__empty">No calculations yet.</li>
+            </ul>
+          </div>
+        </div>
+      </main>
+
+      <footer class="sfdc-footer">
+        <p>&copy; 2024 Salesforce Calculator &bull; Built with Lightning Design System</p>
+      </footer>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
