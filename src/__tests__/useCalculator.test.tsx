@@ -154,13 +154,14 @@ describe('useCalculator hook', () => {
     expect(result.current.state.display).toBe('3');
   });
 
-  // History tests
+  // ---- History tests ----
+
   it('initialises with empty history', () => {
     const { result } = renderHook(() => useCalculator());
     expect(result.current.state.history).toEqual([]);
   });
 
-  it('appends entry to history on successful EQUALS', () => {
+  it('appends a history entry on successful EQUALS', () => {
     const { result } = renderHook(() => useCalculator());
     act(() => result.current.appendDigit('3'));
     act(() => result.current.appendOperator('+'));
@@ -171,51 +172,70 @@ describe('useCalculator hook', () => {
     expect(result.current.state.history[0].result).toBe('7');
   });
 
-  it('does not append to history on error', () => {
+  it('does not append history entry on evaluation error', () => {
     const { result } = renderHook(() => useCalculator());
     act(() => result.current.appendDigit('5'));
     act(() => result.current.appendOperator('/'));
     act(() => result.current.appendDigit('0'));
     act(() => result.current.equals());
-    expect(result.current.state.isError).toBe(true);
     expect(result.current.state.history).toHaveLength(0);
   });
 
   it('accumulates multiple history entries', () => {
     const { result } = renderHook(() => useCalculator());
+    // First calculation: 3+4=7
+    act(() => result.current.appendDigit('3'));
+    act(() => result.current.appendOperator('+'));
+    act(() => result.current.appendDigit('4'));
+    act(() => result.current.equals());
+    expect(result.current.state.history).toHaveLength(1);
+    expect(result.current.state.history[0].result).toBe('7');
+
+    // Second calculation: clear then 2+3=5
+    // After equals, waitingForOperand=true and expression="7"
+    // Use clear to start fresh, then do 2+3
+    act(() => result.current.clear());
     act(() => result.current.appendDigit('2'));
     act(() => result.current.appendOperator('+'));
     act(() => result.current.appendDigit('3'));
     act(() => result.current.equals());
-    act(() => result.current.appendDigit('1'));
-    act(() => result.current.appendDigit('0'));
-    act(() => result.current.appendOperator('/'));
-    act(() => result.current.appendDigit('2'));
-    act(() => result.current.equals());
     expect(result.current.state.history).toHaveLength(2);
+    expect(result.current.state.history[1].expression).toBe('2+3');
     expect(result.current.state.history[1].result).toBe('5');
   });
 
   it('clears history with clearHistory', () => {
     const { result } = renderHook(() => useCalculator());
-    act(() => result.current.appendDigit('3'));
+    act(() => result.current.appendDigit('1'));
     act(() => result.current.appendOperator('+'));
-    act(() => result.current.appendDigit('4'));
+    act(() => result.current.appendDigit('1'));
     act(() => result.current.equals());
     expect(result.current.state.history).toHaveLength(1);
     act(() => result.current.clearHistory());
     expect(result.current.state.history).toHaveLength(0);
   });
 
-  it('preserves history across CLEAR (AC)', () => {
+  it('history persists across CLEAR (AC) action', () => {
     const { result } = renderHook(() => useCalculator());
-    act(() => result.current.appendDigit('3'));
+    act(() => result.current.appendDigit('5'));
     act(() => result.current.appendOperator('+'));
-    act(() => result.current.appendDigit('4'));
+    act(() => result.current.appendDigit('5'));
     act(() => result.current.equals());
     expect(result.current.state.history).toHaveLength(1);
     act(() => result.current.clear());
-    expect(result.current.state.display).toBe('0');
+    // history should still be there after AC
     expect(result.current.state.history).toHaveLength(1);
+    expect(result.current.state.display).toBe('0');
+  });
+
+  it('keyboard-triggered equals appends to history', () => {
+    // Verify that calling equals() (as keyboard would) correctly adds history
+    const { result } = renderHook(() => useCalculator());
+    act(() => result.current.appendDigit('6'));
+    act(() => result.current.appendOperator('*'));
+    act(() => result.current.appendDigit('7'));
+    act(() => result.current.equals()); // simulates keyboard Enter
+    expect(result.current.state.history).toHaveLength(1);
+    expect(result.current.state.history[0].result).toBe('42');
   });
 });

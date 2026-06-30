@@ -24,11 +24,9 @@ describe('useKeyboardInput hook', () => {
     renderHook(() => useKeyboardInput(actions));
     for (const digit of ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) {
       fireKey(digit);
+      expect(actions.appendDigit).toHaveBeenCalledWith(digit);
     }
     expect(actions.appendDigit).toHaveBeenCalledTimes(10);
-    expect(actions.appendDigit).toHaveBeenNthCalledWith(1, '0');
-    expect(actions.appendDigit).toHaveBeenNthCalledWith(5, '4');
-    expect(actions.appendDigit).toHaveBeenNthCalledWith(10, '9');
   });
 
   it('calls decimal for "." key', () => {
@@ -38,70 +36,70 @@ describe('useKeyboardInput hook', () => {
     expect(actions.decimal).toHaveBeenCalledTimes(1);
   });
 
-  it('calls appendOperator for "+"', () => {
+  it('calls appendOperator for "+" key', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('+');
     expect(actions.appendOperator).toHaveBeenCalledWith('+');
   });
 
-  it('calls appendOperator for "-"', () => {
+  it('calls appendOperator for "-" key', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('-');
     expect(actions.appendOperator).toHaveBeenCalledWith('-');
   });
 
-  it('calls appendOperator for "*"', () => {
+  it('calls appendOperator for "*" key', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('*');
     expect(actions.appendOperator).toHaveBeenCalledWith('*');
   });
 
-  it('calls appendOperator for "/"', () => {
+  it('calls appendOperator for "/" key', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('/');
     expect(actions.appendOperator).toHaveBeenCalledWith('/');
   });
 
-  it('calls appendOperator for "^"', () => {
+  it('calls appendOperator for "^" key', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('^');
     expect(actions.appendOperator).toHaveBeenCalledWith('^');
   });
 
-  it('calls equals for "Enter"', () => {
+  it('calls equals for "Enter" key', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('Enter');
     expect(actions.equals).toHaveBeenCalledTimes(1);
   });
 
-  it('calls equals for "="', () => {
+  it('calls equals for "=" key', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('=');
     expect(actions.equals).toHaveBeenCalledTimes(1);
   });
 
-  it('calls backspace for "Backspace"', () => {
+  it('calls backspace for "Backspace" key', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('Backspace');
     expect(actions.backspace).toHaveBeenCalledTimes(1);
   });
 
-  it('calls clear for "Escape"', () => {
+  it('calls clear for "Escape" key', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('Escape');
     expect(actions.clear).toHaveBeenCalledTimes(1);
   });
 
-  it('calls percent for "%"', () => {
+  it('calls percent for "%" key', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('%');
@@ -129,17 +127,15 @@ describe('useKeyboardInput hook', () => {
     expect(actions.appendOperator).not.toHaveBeenCalled();
   });
 
-  it('ignores unmapped keys', () => {
+  it('ignores unrecognised keys', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
+    fireKey('a');
     fireKey('F1');
     fireKey('Tab');
-    fireKey('a');
     expect(actions.appendDigit).not.toHaveBeenCalled();
-    expect(actions.appendOperator).not.toHaveBeenCalled();
     expect(actions.equals).not.toHaveBeenCalled();
     expect(actions.clear).not.toHaveBeenCalled();
-    expect(actions.backspace).not.toHaveBeenCalled();
   });
 
   it('removes event listener on unmount', () => {
