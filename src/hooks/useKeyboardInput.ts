@@ -25,30 +25,17 @@ export function useKeyboardInput(actions: KeyboardActions): void {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       const key = e.key;
-      if (key >= '0' && key <= '9') {
-        appendDigit(key);
-      } else if (key === '.') {
-        decimal();
-      } else if (key === '+') {
-        appendOperator('+');
-      } else if (key === '-') {
-        appendOperator('-');
-      } else if (key === '*') {
-        appendOperator('*');
-      } else if (key === '/') {
-        e.preventDefault();
-        appendOperator('/');
-      } else if (key === '^') {
-        appendOperator('^');
-      } else if (key === 'Enter' || key === '=') {
-        equals();
-      } else if (key === 'Backspace') {
-        backspace();
-      } else if (key === 'Escape') {
-        clear();
-      } else if (key === '%') {
-        percent();
-      }
+      if (key >= '0' && key <= '9') appendDigit(key);
+      else if (key === '.') decimal();
+      else if (key === '+') appendOperator('+');
+      else if (key === '-') appendOperator('-');
+      else if (key === '*') appendOperator('*');
+      else if (key === '/') { e.preventDefault(); appendOperator('/'); }
+      else if (key === '^') appendOperator('^');
+      else if (key === 'Enter' || key === '=') equals();
+      else if (key === 'Backspace') backspace();
+      else if (key === 'Escape') clear();
+      else if (key === '%') percent();
     }
 
     window.addEventListener('keydown', handleKeyDown);

@@ -1,5 +1,5 @@
 import { useReducer, useCallback } from 'react';
-import { CalculatorState, AngleMode, HistoryEntry } from '../types/calculator';
+import { CalculatorState, HistoryEntry } from '../types/calculator';
 import { evaluate } from '../utils/mathEngine';
 
 type Action =
@@ -44,7 +44,6 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
         action.type === 'MEMORY_CLEAR' || action.type === 'MEMORY_ADD') {
       // allow memory ops even after error
     } else if (action.type === 'APPEND_DIGIT') {
-      // Reset to clean state then handle the digit
       const resetState = { ...initialState, angleMode: state.angleMode, memory: state.memory, history: state.history };
       return {
         ...resetState,
@@ -97,7 +96,6 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
 
     case 'APPEND_OPERATOR': {
       const expr = state.expression.trimEnd();
-      // Replace trailing operator if user changes mind
       const replaced = expr.replace(/[+\-*/^]$/, '');
       return {
         ...state,
@@ -136,14 +134,14 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
       try {
         const result = evaluate(state.expression, state.angleMode);
         const display = formatResult(result);
-        const entry: HistoryEntry = { expression: state.expression, result: display };
+        const newEntry: HistoryEntry = { expression: state.expression, result: display };
         return {
           ...state,
           display,
           expression: display,
           waitingForOperand: true,
           isError: false,
-          history: [...state.history, entry],
+          history: [...state.history, newEntry],
         };
       } catch (err) {
         return {
@@ -171,7 +169,6 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
       const toggled = state.display.startsWith('-')
         ? state.display.slice(1)
         : '-' + state.display;
-      // Also update expression
       const newExpr = state.expression.endsWith(state.display)
         ? state.expression.slice(0, -state.display.length) + toggled
         : state.expression;
@@ -229,7 +226,6 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
 
 function formatResult(n: number): string {
   if (!isFinite(n)) return 'Error';
-  // Use up to 10 significant digits, trim trailing zeros
   const str = parseFloat(n.toPrecision(10)).toString();
   return str;
 }
