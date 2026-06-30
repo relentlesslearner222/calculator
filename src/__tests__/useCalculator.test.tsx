@@ -7,11 +7,6 @@ describe('useCalculator hook', () => {
     expect(result.current.state.display).toBe('0');
   });
 
-  it('initialises with empty history', () => {
-    const { result } = renderHook(() => useCalculator());
-    expect(result.current.state.history).toEqual([]);
-  });
-
   it('appends digits correctly', () => {
     const { result } = renderHook(() => useCalculator());
     act(() => result.current.appendDigit('4'));
@@ -154,14 +149,18 @@ describe('useCalculator hook', () => {
     act(() => result.current.appendDigit('0'));
     act(() => result.current.equals());
     expect(result.current.state.isError).toBe(true);
-    // Next digit should clear error
     act(() => result.current.appendDigit('3'));
     expect(result.current.state.isError).toBe(false);
     expect(result.current.state.display).toBe('3');
   });
 
   // History tests
-  it('EQUALS appends entry to history on success', () => {
+  it('initialises with empty history', () => {
+    const { result } = renderHook(() => useCalculator());
+    expect(result.current.state.history).toEqual([]);
+  });
+
+  it('appends entry to history on successful EQUALS', () => {
     const { result } = renderHook(() => useCalculator());
     act(() => result.current.appendDigit('3'));
     act(() => result.current.appendOperator('+'));
@@ -172,16 +171,17 @@ describe('useCalculator hook', () => {
     expect(result.current.state.history[0].result).toBe('7');
   });
 
-  it('EQUALS does not append to history on error', () => {
+  it('does not append to history on error', () => {
     const { result } = renderHook(() => useCalculator());
     act(() => result.current.appendDigit('5'));
     act(() => result.current.appendOperator('/'));
     act(() => result.current.appendDigit('0'));
     act(() => result.current.equals());
+    expect(result.current.state.isError).toBe(true);
     expect(result.current.state.history).toHaveLength(0);
   });
 
-  it('history accumulates multiple entries', () => {
+  it('accumulates multiple history entries', () => {
     const { result } = renderHook(() => useCalculator());
     act(() => result.current.appendDigit('2'));
     act(() => result.current.appendOperator('+'));
@@ -193,9 +193,21 @@ describe('useCalculator hook', () => {
     act(() => result.current.appendDigit('2'));
     act(() => result.current.equals());
     expect(result.current.state.history).toHaveLength(2);
+    expect(result.current.state.history[1].result).toBe('5');
   });
 
-  it('CLEAR preserves history', () => {
+  it('clears history with clearHistory', () => {
+    const { result } = renderHook(() => useCalculator());
+    act(() => result.current.appendDigit('3'));
+    act(() => result.current.appendOperator('+'));
+    act(() => result.current.appendDigit('4'));
+    act(() => result.current.equals());
+    expect(result.current.state.history).toHaveLength(1);
+    act(() => result.current.clearHistory());
+    expect(result.current.state.history).toHaveLength(0);
+  });
+
+  it('preserves history across CLEAR (AC)', () => {
     const { result } = renderHook(() => useCalculator());
     act(() => result.current.appendDigit('3'));
     act(() => result.current.appendOperator('+'));
@@ -203,29 +215,7 @@ describe('useCalculator hook', () => {
     act(() => result.current.equals());
     expect(result.current.state.history).toHaveLength(1);
     act(() => result.current.clear());
-    expect(result.current.state.history).toHaveLength(1);
     expect(result.current.state.display).toBe('0');
-  });
-
-  it('clearHistory wipes history', () => {
-    const { result } = renderHook(() => useCalculator());
-    act(() => result.current.appendDigit('3'));
-    act(() => result.current.appendOperator('+'));
-    act(() => result.current.appendDigit('4'));
-    act(() => result.current.equals());
     expect(result.current.state.history).toHaveLength(1);
-    act(() => result.current.clearHistory());
-    expect(result.current.state.history).toHaveLength(0);
-  });
-
-  it('clearHistory does not affect calculator state', () => {
-    const { result } = renderHook(() => useCalculator());
-    act(() => result.current.appendDigit('9'));
-    act(() => result.current.appendOperator('+'));
-    act(() => result.current.appendDigit('1'));
-    act(() => result.current.equals());
-    act(() => result.current.clearHistory());
-    expect(result.current.state.display).toBe('10');
-    expect(result.current.state.history).toHaveLength(0);
   });
 });

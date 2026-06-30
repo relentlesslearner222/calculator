@@ -14,21 +14,21 @@ function makeActions() {
   };
 }
 
-function fireKey(key: string, options: Partial<KeyboardEventInit> = {}) {
-  fireEvent.keyDown(window, { key, ...options });
+function fireKey(key: string, extra?: Partial<KeyboardEventInit>) {
+  fireEvent.keyDown(window, { key, ...extra });
 }
 
 describe('useKeyboardInput hook', () => {
   it('calls appendDigit for digit keys 0-9', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
-    for (let i = 0; i <= 9; i++) {
-      fireKey(String(i));
+    for (const digit of ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) {
+      fireKey(digit);
     }
     expect(actions.appendDigit).toHaveBeenCalledTimes(10);
-    expect(actions.appendDigit).toHaveBeenCalledWith('0');
-    expect(actions.appendDigit).toHaveBeenCalledWith('5');
-    expect(actions.appendDigit).toHaveBeenCalledWith('9');
+    expect(actions.appendDigit).toHaveBeenNthCalledWith(1, '0');
+    expect(actions.appendDigit).toHaveBeenNthCalledWith(5, '4');
+    expect(actions.appendDigit).toHaveBeenNthCalledWith(10, '9');
   });
 
   it('calls decimal for "." key', () => {
@@ -38,98 +38,111 @@ describe('useKeyboardInput hook', () => {
     expect(actions.decimal).toHaveBeenCalledTimes(1);
   });
 
-  it('calls appendOperator for "+" key', () => {
+  it('calls appendOperator for "+"', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('+');
     expect(actions.appendOperator).toHaveBeenCalledWith('+');
   });
 
-  it('calls appendOperator for "-" key', () => {
+  it('calls appendOperator for "-"', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('-');
     expect(actions.appendOperator).toHaveBeenCalledWith('-');
   });
 
-  it('calls appendOperator for "*" key', () => {
+  it('calls appendOperator for "*"', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('*');
     expect(actions.appendOperator).toHaveBeenCalledWith('*');
   });
 
-  it('calls appendOperator for "/" key', () => {
+  it('calls appendOperator for "/"', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('/');
     expect(actions.appendOperator).toHaveBeenCalledWith('/');
   });
 
-  it('calls appendOperator for "^" key', () => {
+  it('calls appendOperator for "^"', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('^');
     expect(actions.appendOperator).toHaveBeenCalledWith('^');
   });
 
-  it('calls equals for "Enter" key', () => {
+  it('calls equals for "Enter"', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('Enter');
     expect(actions.equals).toHaveBeenCalledTimes(1);
   });
 
-  it('calls equals for "=" key', () => {
+  it('calls equals for "="', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('=');
     expect(actions.equals).toHaveBeenCalledTimes(1);
   });
 
-  it('calls backspace for "Backspace" key', () => {
+  it('calls backspace for "Backspace"', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('Backspace');
     expect(actions.backspace).toHaveBeenCalledTimes(1);
   });
 
-  it('calls clear for "Escape" key', () => {
+  it('calls clear for "Escape"', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('Escape');
     expect(actions.clear).toHaveBeenCalledTimes(1);
   });
 
-  it('calls percent for "%" key', () => {
+  it('calls percent for "%"', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('%');
     expect(actions.percent).toHaveBeenCalledTimes(1);
   });
 
-  it('does not call any action for modifier+key combos', () => {
+  it('ignores keys with Ctrl modifier', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
     fireKey('5', { ctrlKey: true });
-    fireKey('5', { metaKey: true });
-    fireKey('5', { altKey: true });
     expect(actions.appendDigit).not.toHaveBeenCalled();
   });
 
-  it('does not call any action for unmapped keys', () => {
+  it('ignores keys with Meta modifier', () => {
     const actions = makeActions();
     renderHook(() => useKeyboardInput(actions));
-    fireKey('a');
-    fireKey('F5');
+    fireKey('Enter', { metaKey: true });
+    expect(actions.equals).not.toHaveBeenCalled();
+  });
+
+  it('ignores keys with Alt modifier', () => {
+    const actions = makeActions();
+    renderHook(() => useKeyboardInput(actions));
+    fireKey('+', { altKey: true });
+    expect(actions.appendOperator).not.toHaveBeenCalled();
+  });
+
+  it('ignores unmapped keys', () => {
+    const actions = makeActions();
+    renderHook(() => useKeyboardInput(actions));
+    fireKey('F1');
     fireKey('Tab');
+    fireKey('a');
     expect(actions.appendDigit).not.toHaveBeenCalled();
     expect(actions.appendOperator).not.toHaveBeenCalled();
     expect(actions.equals).not.toHaveBeenCalled();
     expect(actions.clear).not.toHaveBeenCalled();
+    expect(actions.backspace).not.toHaveBeenCalled();
   });
 
-  it('cleans up event listener on unmount', () => {
+  it('removes event listener on unmount', () => {
     const actions = makeActions();
     const { unmount } = renderHook(() => useKeyboardInput(actions));
     unmount();

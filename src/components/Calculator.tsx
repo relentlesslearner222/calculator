@@ -25,12 +25,20 @@ export function Calculator() {
     memoryAdd,
   } = useCalculator();
 
-  useKeyboardInput({ appendDigit, appendOperator, decimal, equals, clear, backspace, percent });
+  useKeyboardInput({
+    appendDigit,
+    appendOperator,
+    decimal,
+    equals,
+    clear,
+    backspace,
+    percent,
+  });
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-sm mx-auto">
+    <div className="flex gap-4 w-full max-w-2xl mx-auto">
       <div
-        className="shadow-2xl rounded-2xl overflow-hidden"
+        className="w-full max-w-sm shadow-2xl rounded-2xl overflow-hidden"
         role="application"
         aria-label="Scientific Calculator"
       >
@@ -113,7 +121,9 @@ export function Calculator() {
         </div>
       </div>
 
-      <HistoryPanel entries={state.history} onClear={clearHistory} />
+      <div className="w-64 hidden md:block">
+        <HistoryPanel entries={state.history} onClear={clearHistory} />
+      </div>
     </div>
   );
 }
