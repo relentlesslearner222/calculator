@@ -22,7 +22,7 @@ export function useKeyboardInput(actions: KeyboardActions): void {
   } = actions;
 
   useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       const key = e.key;
       if (key >= '0' && key <= '9') appendDigit(key);
@@ -36,7 +36,7 @@ export function useKeyboardInput(actions: KeyboardActions): void {
       else if (key === 'Backspace') backspace();
       else if (key === 'Escape') clear();
       else if (key === '%') percent();
-    }
+    };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);

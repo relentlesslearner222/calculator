@@ -10,6 +10,7 @@ type Action =
   | { type: 'DECIMAL' }
   | { type: 'EQUALS' }
   | { type: 'CLEAR' }
+  | { type: 'CLEAR_HISTORY' }
   | { type: 'BACKSPACE' }
   | { type: 'TOGGLE_SIGN' }
   | { type: 'TOGGLE_ANGLE_MODE' }
@@ -17,8 +18,7 @@ type Action =
   | { type: 'MEMORY_RECALL' }
   | { type: 'MEMORY_CLEAR' }
   | { type: 'MEMORY_ADD' }
-  | { type: 'PERCENT' }
-  | { type: 'CLEAR_HISTORY' };
+  | { type: 'PERCENT' };
 
 const initialState: CalculatorState = {
   display: '0',
@@ -44,6 +44,7 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
         action.type === 'MEMORY_CLEAR' || action.type === 'MEMORY_ADD') {
       // allow memory ops even after error
     } else if (action.type === 'APPEND_DIGIT') {
+      // Reset to clean state then handle the digit
       const resetState = { ...initialState, angleMode: state.angleMode, memory: state.memory, history: state.history };
       return {
         ...resetState,
@@ -96,6 +97,7 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
 
     case 'APPEND_OPERATOR': {
       const expr = state.expression.trimEnd();
+      // Replace trailing operator if user changes mind
       const replaced = expr.replace(/[+\-*/^]$/, '');
       return {
         ...state,
@@ -134,14 +136,14 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
       try {
         const result = evaluate(state.expression, state.angleMode);
         const display = formatResult(result);
-        const newEntry: HistoryEntry = { expression: state.expression, result: display };
+        const entry: HistoryEntry = { expression: state.expression, result: display };
         return {
           ...state,
           display,
           expression: display,
           waitingForOperand: true,
           isError: false,
-          history: [...state.history, newEntry],
+          history: [...state.history, entry],
         };
       } catch (err) {
         return {
@@ -169,6 +171,7 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
       const toggled = state.display.startsWith('-')
         ? state.display.slice(1)
         : '-' + state.display;
+      // Also update expression
       const newExpr = state.expression.endsWith(state.display)
         ? state.expression.slice(0, -state.display.length) + toggled
         : state.expression;
@@ -226,6 +229,7 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
 
 function formatResult(n: number): string {
   if (!isFinite(n)) return 'Error';
+  // Use up to 10 significant digits, trim trailing zeros
   const str = parseFloat(n.toPrecision(10)).toString();
   return str;
 }
@@ -241,6 +245,7 @@ export function useCalculator() {
   const decimal = useCallback(() => dispatch({ type: 'DECIMAL' }), []);
   const equals = useCallback(() => dispatch({ type: 'EQUALS' }), []);
   const clear = useCallback(() => dispatch({ type: 'CLEAR' }), []);
+  const clearHistory = useCallback(() => dispatch({ type: 'CLEAR_HISTORY' }), []);
   const backspace = useCallback(() => dispatch({ type: 'BACKSPACE' }), []);
   const toggleSign = useCallback(() => dispatch({ type: 'TOGGLE_SIGN' }), []);
   const toggleAngleMode = useCallback(() => dispatch({ type: 'TOGGLE_ANGLE_MODE' }), []);
@@ -249,7 +254,6 @@ export function useCalculator() {
   const memoryRecall = useCallback(() => dispatch({ type: 'MEMORY_RECALL' }), []);
   const memoryClear = useCallback(() => dispatch({ type: 'MEMORY_CLEAR' }), []);
   const memoryAdd = useCallback(() => dispatch({ type: 'MEMORY_ADD' }), []);
-  const clearHistory = useCallback(() => dispatch({ type: 'CLEAR_HISTORY' }), []);
 
   return {
     state,
@@ -260,6 +264,7 @@ export function useCalculator() {
     decimal,
     equals,
     clear,
+    clearHistory,
     backspace,
     toggleSign,
     toggleAngleMode,
@@ -268,6 +273,5 @@ export function useCalculator() {
     memoryRecall,
     memoryClear,
     memoryAdd,
-    clearHistory,
   };
 }
