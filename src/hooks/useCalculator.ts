@@ -1,5 +1,5 @@
 import { useReducer, useCallback } from 'react';
-import { CalculatorState, AngleMode } from '../types/calculator';
+import { CalculatorState, AngleMode, HistoryEntry } from '../types/calculator';
 import { evaluate } from '../utils/mathEngine';
 
 type Action =
@@ -17,7 +17,8 @@ type Action =
   | { type: 'MEMORY_RECALL' }
   | { type: 'MEMORY_CLEAR' }
   | { type: 'MEMORY_ADD' }
-  | { type: 'PERCENT' };
+  | { type: 'PERCENT' }
+  | { type: 'CLEAR_HISTORY' };
 
 const initialState: CalculatorState = {
   display: '0',
@@ -26,11 +27,16 @@ const initialState: CalculatorState = {
   isError: false,
   waitingForOperand: false,
   memory: 0,
+  history: [],
 };
 
 function calculatorReducer(state: CalculatorState, action: Action): CalculatorState {
   if (action.type === 'CLEAR') {
-    return { ...initialState, angleMode: state.angleMode, memory: state.memory };
+    return { ...initialState, angleMode: state.angleMode, memory: state.memory, history: state.history };
+  }
+
+  if (action.type === 'CLEAR_HISTORY') {
+    return { ...state, history: [] };
   }
 
   if (state.isError && action.type !== 'TOGGLE_ANGLE_MODE') {
@@ -39,7 +45,7 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
       // allow memory ops even after error
     } else if (action.type === 'APPEND_DIGIT') {
       // Reset to clean state then handle the digit
-      const resetState = { ...initialState, angleMode: state.angleMode, memory: state.memory };
+      const resetState = { ...initialState, angleMode: state.angleMode, memory: state.memory, history: state.history };
       return {
         ...resetState,
         display: action.digit,
@@ -48,7 +54,7 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
         waitingForOperand: false,
       };
     } else {
-      return { ...initialState, angleMode: state.angleMode, memory: state.memory };
+      return { ...initialState, angleMode: state.angleMode, memory: state.memory, history: state.history };
     }
   }
 
@@ -130,12 +136,14 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
       try {
         const result = evaluate(state.expression, state.angleMode);
         const display = formatResult(result);
+        const entry: HistoryEntry = { expression: state.expression, result: display };
         return {
           ...state,
           display,
           expression: display,
           waitingForOperand: true,
           isError: false,
+          history: [...state.history, entry],
         };
       } catch (err) {
         return {
@@ -245,6 +253,7 @@ export function useCalculator() {
   const memoryRecall = useCallback(() => dispatch({ type: 'MEMORY_RECALL' }), []);
   const memoryClear = useCallback(() => dispatch({ type: 'MEMORY_CLEAR' }), []);
   const memoryAdd = useCallback(() => dispatch({ type: 'MEMORY_ADD' }), []);
+  const clearHistory = useCallback(() => dispatch({ type: 'CLEAR_HISTORY' }), []);
 
   return {
     state,
@@ -263,5 +272,6 @@ export function useCalculator() {
     memoryRecall,
     memoryClear,
     memoryAdd,
+    clearHistory,
   };
 }
