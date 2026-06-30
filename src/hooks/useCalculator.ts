@@ -37,6 +37,16 @@ function calculatorReducer(state: CalculatorState, action: Action): CalculatorSt
     if (action.type === 'MEMORY_RECALL' || action.type === 'MEMORY_STORE' ||
         action.type === 'MEMORY_CLEAR' || action.type === 'MEMORY_ADD') {
       // allow memory ops even after error
+    } else if (action.type === 'APPEND_DIGIT') {
+      // Reset to clean state then handle the digit
+      const resetState = { ...initialState, angleMode: state.angleMode, memory: state.memory };
+      return {
+        ...resetState,
+        display: action.digit,
+        expression: action.digit,
+        isError: false,
+        waitingForOperand: false,
+      };
     } else {
       return { ...initialState, angleMode: state.angleMode, memory: state.memory };
     }
