@@ -2,6 +2,7 @@
   "name": "calculator",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Scientific Calculator web application",
   "scripts": {
     "start": "vite",
@@ -34,9 +35,6 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "jsdom",
-    "setupFilesAfterFramework": [],
-    "setupFilesAfterFramework ": [],
-    "setupFiles": [],
     "setupFilesAfterEnv": ["@testing-library/jest-dom"],
     "moduleNameMapper": {
       "\\.(css|less|scss|sass)$": "<rootDir>/src/__mocks__/styleMock.ts"

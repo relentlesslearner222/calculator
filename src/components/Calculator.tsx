@@ -1,7 +1,10 @@
-import React, { useEffect, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Display } from './Display';
 import { CalcButton } from './CalcButton';
+import { HistoryPanel } from './HistoryPanel';
 import { useCalculator } from '../hooks/useCalculator';
+import { useKeyboardInput } from '../hooks/useKeyboardInput';
+import { HistoryEntry } from '../types/calculator';
 
 export function Calculator() {
   const {
@@ -23,30 +26,43 @@ export function Calculator() {
     memoryAdd,
   } = useCalculator();
 
-  // Keyboard support
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey || e.altKey) return;
-      const key = e.key;
-      if (key >= '0' && key <= '9') appendDigit(key);
-      else if (key === '.') decimal();
-      else if (key === '+') appendOperator('+');
-      else if (key === '-') appendOperator('-');
-      else if (key === '*') appendOperator('*');
-      else if (key === '/') { e.preventDefault(); appendOperator('/'); }
-      else if (key === '^') appendOperator('^');
-      else if (key === 'Enter' || key === '=') equals();
-      else if (key === 'Backspace') backspace();
-      else if (key === 'Escape') clear();
-      else if (key === '%') percent();
-    },
-    [appendDigit, appendOperator, decimal, equals, backspace, clear, percent]
-  );
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const prevExpressionRef = useRef<string>('');
+  const prevDisplayRef = useRef<string>('');
 
+  // Track expression before equals is dispatched
+  const handleEquals = () => {
+    prevExpressionRef.current = state.expression;
+    prevDisplayRef.current = state.display;
+    equals();
+  };
+
+  // After equals dispatch, state.waitingForOperand becomes true and display changes
+  // We detect a completed calculation when waitingForOperand transitions to true after equals
+  const waitingForOperandRef = useRef(state.waitingForOperand);
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
+    const wasWaiting = waitingForOperandRef.current;
+    waitingForOperandRef.current = state.waitingForOperand;
+
+    // If we just got a result (transitioned to waitingForOperand=true, not an error)
+    if (!wasWaiting && state.waitingForOperand && !state.isError && prevExpressionRef.current) {
+      setHistory(prev => [
+        { expression: prevExpressionRef.current, result: state.display },
+        ...prev,
+      ]);
+      prevExpressionRef.current = '';
+    }
+  }, [state.waitingForOperand, state.isError, state.display]);
+
+  useKeyboardInput({
+    appendDigit,
+    appendOperator,
+    decimal,
+    equals: handleEquals,
+    backspace,
+    clear,
+    percent,
+  });
 
   return (
     <div
@@ -129,8 +145,10 @@ export function Calculator() {
         <CalcButton label="0" variant="number" wide onClick={() => appendDigit('0')} />
         <CalcButton label="." variant="number" onClick={decimal} ariaLabel="decimal point" />
         <div />{/* spacer */}
-        <CalcButton label="=" variant="equals" onClick={equals} ariaLabel="equals" testId="btn-equals" />
+        <CalcButton label="=" variant="equals" onClick={handleEquals} ariaLabel="equals" testId="btn-equals" />
       </div>
+
+      <HistoryPanel entries={history} onClear={() => setHistory([])} />
     </div>
   );
 }

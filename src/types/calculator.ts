@@ -17,3 +17,8 @@ export interface CalcButton {
   variant: ButtonVariant;
   ariaLabel?: string;
 }
+
+export interface HistoryEntry {
+  expression: string;
+  result: string;
+}

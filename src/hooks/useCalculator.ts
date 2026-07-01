@@ -1,5 +1,5 @@
 import { useReducer, useCallback } from 'react';
-import { CalculatorState, AngleMode } from '../types/calculator';
+import { CalculatorState } from '../types/calculator';
 import { evaluate } from '../utils/mathEngine';
 
 type Action =
