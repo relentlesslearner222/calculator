@@ -1,0 +1,25 @@
+.wrapper {
+  padding: var(--space-2);
+  background: var(--color-neutral-10);
+}
+
+.basicGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.sciGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--color-neutral-50);
+}
+
+@media (max-width: 480px) {
+  .sciGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

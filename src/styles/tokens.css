@@ -1,0 +1,51 @@
+:root {
+  /* Colours */
+  --color-primary: #0176d3;
+  --color-primary-dark: #014486;
+  --color-primary-light: #d8edff;
+  --color-neutral-10: #f3f3f3;
+  --color-neutral-50: #dddbda;
+  --color-neutral-70: #706e6b;
+  --color-neutral-90: #3e3e3c;
+  --color-white: #ffffff;
+  --color-error: #c23934;
+  --color-focus-ring: #1b96ff;
+  --color-sci-bg: #032d60;
+  --color-sci-fg: #cfe4ff;
+  --color-equals-bg: #0176d3;
+  --color-equals-fg: #ffffff;
+  --color-op-bg: #e8f4ff;
+  --color-op-fg: #0176d3;
+  --color-clear-bg: #fde8e8;
+  --color-clear-fg: #c23934;
+
+  /* Typography */
+  --font-family: 'Salesforce Sans', system-ui, -apple-system, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-display: 2.5rem;
+
+  /* Spacing (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-pill: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.16);
+
+  /* Transitions */
+  --transition-fast: 100ms ease;
+  --transition-med: 200ms ease;
+}
