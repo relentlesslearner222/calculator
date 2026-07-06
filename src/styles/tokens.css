@@ -1,0 +1,23 @@
+:root {
+  --color-primary:       #0176D3;
+  --color-primary-dark:  #014486;
+  --color-neutral-10:    #F3F3F3;
+  --color-neutral-50:    #DDDBDA;
+  --color-neutral-70:    #706E6B;
+  --color-neutral-90:    #3E3E3C;
+  --color-white:         #FFFFFF;
+  --color-error:         #C23934;
+  --color-focus-ring:    #1B96FF;
+  --font-family:         'Salesforce Sans', system-ui, -apple-system, sans-serif;
+  --font-size-xs:        0.75rem;
+  --font-size-sm:        0.875rem;
+  --font-size-md:        1rem;
+  --font-size-lg:        1.25rem;
+  --font-size-xl:        1.5rem;
+  --font-size-display:   2.5rem;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px;
+  --space-4: 16px; --space-6: 24px; --space-8: 32px;
+  --radius-sm: 4px; --radius-md: 8px; --radius-pill: 9999px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.12);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.16);
+}
