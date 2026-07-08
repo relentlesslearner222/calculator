@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculator</title>
+  <link rel="stylesheet" href="src/calculator.css" />
+</head>
+<body>
+
+<!-- ===== Shortcut Legend Modal ===== -->
+<div class="modal-overlay" id="shortcutModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    <h2 id="modalTitle">⌨️ Keyboard Shortcuts</h2>
+    <table>
+      <thead>
+        <tr><th>Key</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><kbd>0</kbd> – <kbd>9</kbd></td><td>Digits</td></tr>
+        <tr><td><kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> <kbd>/</kbd></td><td>Operators</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>=</kbd></td><td>Evaluate</td></tr>
+        <tr><td><kbd>Backspace</kbd></td><td>Delete last character</td></tr>
+        <tr><td><kbd>Escape</kbd></td><td>Clear (AC)</td></tr>
+        <tr><td><kbd>.</kbd></td><td>Decimal point</td></tr>
+        <tr><td><kbd>%</kbd></td><td>Percent</td></tr>
+        <tr><td colspan="2" style="color:#7fa8e0;padding-top:12px;font-size:12px;letter-spacing:1px;">SCIENTIFIC MODE</td></tr>
+        <tr><td><kbd>s</kbd></td><td>sin</td></tr>
+        <tr><td><kbd>c</kbd></td><td>cos</td></tr>
+        <tr><td><kbd>t</kbd></td><td>tan</td></tr>
+        <tr><td><kbd>l</kbd></td><td>log</td></tr>
+        <tr><td><kbd>n</kbd></td><td>ln</td></tr>
+        <tr><td><kbd>^</kbd></td><td>Power (xʸ)</td></tr>
+        <tr><td><kbd>r</kbd></td><td>√ (sqrt)</td></tr>
+        <tr><td><kbd>?</kbd></td><td>Toggle this legend</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== Calculator ===== -->
+<div class="calculator" id="calculator">
+
+  <div class="toolbar">
+    <span class="toolbar-title">Calculator</span>
+    <div class="toolbar-actions">
+      <button class="btn-icon" id="btnSciToggle" title="Toggle Scientific mode">SCI</button>
+      <button class="btn-icon" id="btnHelp" title="Keyboard shortcuts (?)">?</button>
+    </div>
+  </div>
+
+  <div class="display">
+    <div class="display-expression" id="expression"></div>
+    <div class="display-value" id="displayValue">0</div>
+  </div>
+
+  <!-- Scientific buttons (hidden until SCI mode) -->
+  <div class="scientific-section" id="scientificSection">
+    <button class="btn btn-scientific" data-action="scientific" data-value="sin">sin <small>s</small></button>
+    <button class="btn btn-scientific" data-action="scientific" data-value="cos">cos <small>c</small></button>
+    <button class="btn btn-scientific" data-action="scientific" data-value="tan">tan <small>t</small></button>
+    <button class="btn btn-scientific" data-action="scientific" data-value="log">log <small>l</small></button>
+    <button class="btn btn-scientific" data-action="scientific" data-value="ln">ln <small>n</small></button>
+    <button class="btn btn-scientific" data-action="scientific" data-value="sqrt">√ <small>r</small></button>
+    <button class="btn btn-scientific" data-action="scientific" data-value="pow">xʸ <small>^</small></button>
+    <button class="btn btn-scientific" data-action="scientific" data-value="pi">π</button>
+  </div>
+
+  <!-- Standard buttons -->
+  <div class="buttons buttons-standard">
+    <button class="btn btn-action" data-action="clear">AC</button>
+    <button class="btn btn-action" data-action="sign">+/-</button>
+    <button class="btn btn-action" data-action="percent">%</button>
+    <button class="btn btn-operator" data-action="operator" data-value="/">÷</button>
+
+    <button class="btn" data-action="digit" data-value="7">7</button>
+    <button class="btn" data-action="digit" data-value="8">8</button>
+    <button class="btn" data-action="digit" data-value="9">9</button>
+    <button class="btn btn-operator" data-action="operator" data-value="*">×</button>
+
+    <button class="btn" data-action="digit" data-value="4">4</button>
+    <button class="btn" data-action="digit" data-value="5">5</button>
+    <button class="btn" data-action="digit" data-value="6">6</button>
+    <button class="btn btn-operator" data-action="operator" data-value="-">−</button>
+
+    <button class="btn" data-action="digit" data-value="1">1</button>
+    <button class="btn" data-action="digit" data-value="2">2</button>
+    <button class="btn" data-action="digit" data-value="3">3</button>
+    <button class="btn btn-operator" data-action="operator" data-value="+">+</button>
+
+    <button class="btn" data-action="digit" data-value="0" style="grid-column: span 2;">0</button>
+    <button class="btn" data-action="decimal">.</button>
+    <button class="btn btn-equals" data-action="evaluate">=</button>
+
+    <button class="btn btn-action" data-action="delete" style="grid-column: span 4;">⌫ DEL</button>
+  </div>
+
+</div>
+
+<script src="src/keyboardMapping.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>
